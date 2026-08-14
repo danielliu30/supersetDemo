@@ -268,6 +268,7 @@ HASH_ALGORITHM: Literal["md5", "sha256"] = "sha256"
 # TODO: security fix needed for weak-hash
 #
 # Example: When HASH_ALGORITHM='sha256', lookups will try:
+# TODO: security fix needed for weak-hash
 #   1. SHA-256 UUID (primary)
 #   2. MD5 UUID (fallback for legacy entries)
 #
