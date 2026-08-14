@@ -1081,6 +1081,7 @@ The MCP (Model Context Protocol) service enables AI assistants and automation to
 
 ```python
 # superset_config.py
+# TODO: security fix needed for weak-hash
 MCP_DEV_USERNAME = "admin"  # User for MCP authentication
 MCP_SERVICE_HOST = "localhost"
 MCP_SERVICE_PORT = 5008
