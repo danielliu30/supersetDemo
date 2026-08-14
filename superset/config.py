@@ -2064,7 +2064,7 @@ SMTP_USER = "superset"
 SMTP_PORT = 25
 # TODO: security fix needed for hardcoded-secret
 # TODO: security fix needed for hardcoded-secret
-SMTP_PASSWORD = "superset"  # noqa: S105
+SMTP_PASSWORD = "${REDACTED}"  # noqa: S105
 SMTP_MAIL_FROM = "superset@superset.com"
 # If True creates a default SSL context with ssl.Purpose.SERVER_AUTH using the
 # default system root CA certificates. This makes STARTTLS/SSL connections to the
