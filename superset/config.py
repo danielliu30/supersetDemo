@@ -2062,6 +2062,7 @@ SMTP_HOST = "localhost"
 SMTP_STARTTLS = True
 SMTP_SSL = False
 SMTP_USER = "superset"
+# TODO: security fix needed for hardcoded-secret
 SMTP_PORT = 25
 # TODO: security fix needed for hardcoded-secret
 # TODO: security fix needed for hardcoded-secret
