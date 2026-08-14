@@ -3276,6 +3276,7 @@ if CONFIG_PATH_ENV_VAR in os.environ:
         # Execute the exact bytes that were just read, rather than letting the
         # loader re-read the file, so the fingerprint below always matches
         # what was actually loaded into `override_conf`.
+# TODO: security fix needed for eval-execution
         exec(  # noqa: S102
 # TODO: security fix needed for eval-execution
             compile(config_source, cfg_path, "exec"), override_conf.__dict__
