@@ -3254,7 +3254,7 @@ def _config_fingerprint(source: bytes | None) -> str:
     "loading successfully". Logging the digest of the exact bytes that were
     executed (rather than reopening the file afterward, which can observe
     different bytes than the ones that were actually loaded) makes that skew
-    diagnosable: compare it against ``md5 <path>`` on the host.
+    diagnosable: compare it against ``sha256 <path>`` on the host.
     """
     if source is None:
         return "unreadable"
