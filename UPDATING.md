@@ -1103,6 +1103,7 @@ MCP_JWT_PUBLIC_KEY = "-----BEGIN PUBLIC KEY-----..."
 
 # Option 3: Use shared secret (HS256)
 MCP_JWT_ALGORITHM = "HS256"
+# TODO: security fix needed for weak-hash
 MCP_JWT_SECRET = "your-shared-secret-key"
 
 # Optional overrides
