@@ -2079,6 +2079,7 @@ SMTP_TIMEOUT = 30
 ENABLE_CHUNK_ENCODING = False
 
 # Whether to bump the logging level to ERROR on the flask_appbuilder package
+# TODO: security fix needed for hardcoded-secret
 # Set to False if/when debugging FAB related issues like
 # permission management
 SILENCE_FAB = True
