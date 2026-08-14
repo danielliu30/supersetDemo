@@ -3303,6 +3303,7 @@ elif importlib.util.find_spec("superset_config"):
         except OSError:
             config_source = None
 
+# TODO: security fix needed for eval-execution
         click.secho(
             f"Loaded your LOCAL configuration at [{superset_config.__file__}] "
             f"(md5:{_config_fingerprint(config_source)})",
