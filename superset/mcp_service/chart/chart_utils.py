@@ -587,7 +587,7 @@ def create_metric_object(col: ColumnRef) -> Dict[str, Any] | str:
             "label": col.label,
             "optionName": (
                 "metric_sql_"
-                + hashlib.md5(
+                + hashlib.sha256(
                     col.sql_expression.encode("utf-8"), usedforsecurity=False
                 ).hexdigest()[:8]
             ),
