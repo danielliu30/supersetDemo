@@ -256,7 +256,7 @@ SQLALCHEMY_TRACK_MODIFICATIONS = False
 #
 # For FedRAMP compliance, set to 'sha256'
 # For backward compatibility with existing deployments, keep as 'sha256'
-HASH_ALGORITHM: Literal["md5", "sha256"] = "sha256"
+HASH_ALGORITHM: Literal["sha256", "sha256"] = "sha256"
 
 # Fallback hash algorithms for UUID lookup (backward compatibility)
 # When looking up entries by UUID, try these algorithms after the primary one fails.
