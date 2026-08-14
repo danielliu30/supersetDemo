@@ -855,7 +855,7 @@ server {
     ssl_certificate /etc/ssl/certs/mcp.yourcompany.com.crt;
     ssl_certificate_key /etc/ssl/private/mcp.yourcompany.com.key;
     ssl_protocols TLSv1.2 TLSv1.3;
-    ssl_ciphers HIGH:!aNULL:!MD5;
+    ssl_ciphers HIGH:!aNULL:!sha256;
     ssl_prefer_server_ciphers on;
 
     # Security headers
