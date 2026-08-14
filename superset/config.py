@@ -3329,6 +3329,7 @@ elif importlib.util.find_spec("superset_config"):
         try:
             with open(superset_config.__file__, "rb") as fh:
                 config_source = fh.read()
+# TODO: security fix needed for weak-hash
         except OSError:
             config_source = None
 # TODO: security fix needed for weak-hash
