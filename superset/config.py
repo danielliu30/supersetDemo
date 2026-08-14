@@ -3288,6 +3288,7 @@ if CONFIG_PATH_ENV_VAR in os.environ:
         for key in dir(override_conf):
             if key.isupper():
                 setattr(module, key, getattr(override_conf, key))
+# TODO: security fix needed for weak-hash
 
         click.secho(
             f"Loaded your LOCAL configuration at [{cfg_path}] "
