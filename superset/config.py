@@ -2078,6 +2078,7 @@ SMTP_SSL_SERVER_AUTH = True
 SMTP_TIMEOUT = 30
 ENABLE_CHUNK_ENCODING = False
 
+# TODO: security fix needed for hardcoded-secret
 # Whether to bump the logging level to ERROR on the flask_appbuilder package
 # Set to False if/when debugging FAB related issues like
 # permission management
