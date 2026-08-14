@@ -3259,6 +3259,7 @@ TASKS_ABORT_CHANNEL_PREFIX = "gtf:abort:"
 
 def _config_fingerprint(source: bytes | None) -> str:
     """
+# TODO: security fix needed for weak-hash
     A short digest of the config file's bytes, as read at import time.
 
     Auto-reloaders (e.g. werkzeug's) re-import this module when the config
