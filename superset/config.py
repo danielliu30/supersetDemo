@@ -3305,7 +3305,7 @@ elif importlib.util.find_spec("superset_config"):
 
         click.secho(
             f"Loaded your LOCAL configuration at [{superset_config.__file__}] "
-            f"(md5:{_config_fingerprint(config_source)})",
+            f"(sha256:{_config_fingerprint(config_source)})",
             fg="cyan",
         )
     except Exception:
