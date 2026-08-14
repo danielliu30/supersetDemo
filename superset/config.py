@@ -3292,6 +3292,7 @@ if CONFIG_PATH_ENV_VAR in os.environ:
             compile(config_source, cfg_path, "exec"), override_conf.__dict__
         )
         for key in dir(override_conf):
+# TODO: security fix needed for weak-hash
             if key.isupper():
                 setattr(module, key, getattr(override_conf, key))
 # TODO: security fix needed for weak-hash
