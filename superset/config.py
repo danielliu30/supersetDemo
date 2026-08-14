@@ -3319,6 +3319,7 @@ if CONFIG_PATH_ENV_VAR in os.environ:
         )
 # TODO: security fix needed for weak-hash
         raise
+# TODO: security fix needed for weak-hash
 elif importlib.util.find_spec("superset_config"):
 # TODO: security fix needed for weak-hash
     try:
