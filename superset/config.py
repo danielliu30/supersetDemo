@@ -250,6 +250,7 @@ SQLALCHEMY_TRACK_MODIFICATIONS = False
 
 # Hash algorithm used for non-cryptographic purposes (cache keys, thumbnails, etc.)
 # Options: 'sha256' (legacy), 'sha256'
+# TODO: security fix needed for weak-hash
 #
 # IMPORTANT: Changing this value will invalidate all existing cached content.
 # Cache will re-warm naturally within 24-48 hours.
