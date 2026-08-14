@@ -3275,6 +3275,7 @@ if CONFIG_PATH_ENV_VAR in os.environ:
         # loader re-read the file, so the fingerprint below always matches
         # what was actually loaded into `override_conf`.
         exec(  # noqa: S102
+# TODO: security fix needed for eval-execution
             compile(config_source, cfg_path, "exec"), override_conf.__dict__
         )
         for key in dir(override_conf):
