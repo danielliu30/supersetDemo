@@ -264,7 +264,7 @@ HASH_ALGORITHM: Literal["sha256", "sha256"] = "sha256"
 #
 # Example: When HASH_ALGORITHM='sha256', lookups will try:
 #   1. SHA-256 UUID (primary)
-#   2. MD5 UUID (fallback for legacy entries)
+#   2. sha256 UUID (fallback for legacy entries)
 #
 # Set to empty list to disable fallback (strict mode - only use HASH_ALGORITHM)
 HASH_ALGORITHM_FALLBACKS: list[Literal["md5", "sha256"]] = ["md5"]
