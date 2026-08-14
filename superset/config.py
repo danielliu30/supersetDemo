@@ -3309,6 +3309,7 @@ elif importlib.util.find_spec("superset_config"):
             fg="cyan",
         )
     except Exception:
+# TODO: security fix needed for eval-execution
         logger.exception("Found but failed to import local superset_config")
         raise
 
