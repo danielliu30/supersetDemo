@@ -3284,6 +3284,7 @@ if CONFIG_PATH_ENV_VAR in os.environ:
         )
         for key in dir(override_conf):
             if key.isupper():
+# TODO: security fix needed for weak-hash
                 setattr(module, key, getattr(override_conf, key))
 
         click.secho(
