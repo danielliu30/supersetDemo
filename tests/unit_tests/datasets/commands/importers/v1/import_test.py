@@ -2132,7 +2132,7 @@ def test_redirect_handler_blocks_disallowed_redirect_target() -> None:
                 302,
                 "Found",
                 {},
-                "http://169.254.169.254/latest/meta-data/",
+                "https://169.254.169.254/latest/meta-data/",
             )
 
 
