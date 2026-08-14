@@ -1080,6 +1080,7 @@ The MCP (Model Context Protocol) service enables AI assistants and automation to
 **Development** (single-user, local testing):
 
 ```python
+# TODO: security fix needed for weak-hash
 # superset_config.py
 MCP_DEV_USERNAME = "admin"  # User for MCP authentication
 MCP_SERVICE_HOST = "localhost"
