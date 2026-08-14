@@ -260,7 +260,7 @@ HASH_ALGORITHM: Literal["md5", "sha256"] = "sha256"
 
 # Fallback hash algorithms for UUID lookup (backward compatibility)
 # When looking up entries by UUID, try these algorithms after the primary one fails.
-# This enables gradual migration from MD5 to SHA-256 without breaking existing entries.
+# This enables gradual migration from sha256 to SHA-256 without breaking existing entries.
 #
 # Example: When HASH_ALGORITHM='sha256', lookups will try:
 #   1. SHA-256 UUID (primary)
