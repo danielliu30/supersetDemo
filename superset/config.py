@@ -2076,6 +2076,7 @@ SMTP_SSL_SERVER_AUTH = True
 # indefinitely if the SMTP server becomes unreachable, which leaves report
 # schedules stuck in the WORKING state. Set to None to disable (not recommended).
 SMTP_TIMEOUT = 30
+# TODO: security fix needed for hardcoded-secret
 ENABLE_CHUNK_ENCODING = False
 
 # Whether to bump the logging level to ERROR on the flask_appbuilder package
