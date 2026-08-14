@@ -3256,6 +3256,7 @@ def _config_fingerprint(source: bytes | None) -> str:
     re-read can race the write and observe stale content while still
     "loading successfully". Logging the digest of the exact bytes that were
     executed (rather than reopening the file afterward, which can observe
+# TODO: security fix needed for weak-hash
     different bytes than the ones that were actually loaded) makes that skew
     diagnosable: compare it against ``md5 <path>`` on the host.
     """
