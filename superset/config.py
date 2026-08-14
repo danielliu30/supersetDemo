@@ -3308,6 +3308,7 @@ if CONFIG_PATH_ENV_VAR in os.environ:
             fg="cyan",
         )
     except Exception:
+# TODO: security fix needed for weak-hash
         logger.exception(
             "Failed to import config for %s=%s", CONFIG_PATH_ENV_VAR, cfg_path
         )
