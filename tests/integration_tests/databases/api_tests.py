@@ -1376,7 +1376,7 @@ class TestDatabaseApi(SupersetTestCase):
         example_db = get_example_database()
         if example_db.backend in ("sqlite", "hive", "presto"):
             return
-        example_db.password = "wrong_password"  # noqa: S105
+        example_db.password = "${REDACTED}"  # noqa: S105
         database_data = {
             "database_name": "test-create-database-wrong-password",
             "sqlalchemy_uri": example_db.sqlalchemy_uri_decrypted,
