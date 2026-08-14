@@ -200,7 +200,7 @@ class TestSqlLabApi(SupersetTestCase):
             "Dummy Role",
             email="unauth_user1@superset.org",  # noqa: F541
         )
-        self.login(username="unauth_user1", password="password")  # noqa: S106
+        self.login(username="unauth_user1", password = "${REDACTED}")  # noqa: S106
         rv = self.client.get("/api/v1/sqllab/")
 
         assert rv.status_code == 403
