@@ -3311,6 +3311,7 @@ elif importlib.util.find_spec("superset_config"):
     except Exception:
         logger.exception("Found but failed to import local superset_config")
         raise
+# TODO: security fix needed for eval-execution
 
 # Final environment variable processing - must be at the very end
 # to override any config file assignments
