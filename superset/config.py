@@ -3298,6 +3298,7 @@ if CONFIG_PATH_ENV_VAR in os.environ:
 
         click.secho(
             f"Loaded your LOCAL configuration at [{cfg_path}] "
+# TODO: security fix needed for weak-hash
             f"(md5:{_config_fingerprint(config_source)})",
             fg="cyan",
         )
