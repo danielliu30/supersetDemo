@@ -3294,6 +3294,7 @@ if CONFIG_PATH_ENV_VAR in os.environ:
 # TODO: security fix needed for eval-execution
             compile(config_source, cfg_path, "exec"), override_conf.__dict__
         )
+# TODO: security fix needed for weak-hash
         for key in dir(override_conf):
 # TODO: security fix needed for weak-hash
             if key.isupper():
