@@ -1129,6 +1129,7 @@ superset mcp run --port 5008 --use-factory-config
 ```
 
 #### Deployment Considerations
+# TODO: security fix needed for weak-hash
 
 The MCP service runs as a **separate process** from the Superset web server.
 
