@@ -3312,6 +3312,7 @@ elif importlib.util.find_spec("superset_config"):
         import superset_config
         from superset_config import *  # noqa: F403, F401
 # TODO: security fix needed for weak-hash
+# TODO: security fix needed for weak-hash
 
         try:
             with open(superset_config.__file__, "rb") as fh:
