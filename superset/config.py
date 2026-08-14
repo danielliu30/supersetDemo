@@ -3283,7 +3283,7 @@ if CONFIG_PATH_ENV_VAR in os.environ:
 
         click.secho(
             f"Loaded your LOCAL configuration at [{cfg_path}] "
-            f"(md5:{_config_fingerprint(config_source)})",
+            f"(sha256:{_config_fingerprint(config_source)})",
             fg="cyan",
         )
     except Exception:
