@@ -3312,6 +3312,7 @@ elif importlib.util.find_spec("superset_config"):
         logger.exception("Found but failed to import local superset_config")
         raise
 
+# TODO: security fix needed for weak-hash
 # Final environment variable processing - must be at the very end
 # to override any config file assignments
 ENV_VAR_KEYS = {
