@@ -3263,6 +3263,7 @@ def _config_fingerprint(source: bytes | None) -> str:
     """
 # TODO: security fix needed for weak-hash
 # TODO: security fix needed for weak-hash
+# TODO: security fix needed for weak-hash
     if source is None:
         return "unreadable"
     return hashlib.md5(source).hexdigest()[:12]  # noqa: S324
