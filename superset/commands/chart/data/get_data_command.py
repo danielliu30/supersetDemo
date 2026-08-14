@@ -98,5 +98,5 @@ class ChartDataCommand(BaseCommand):
         )
 
     def validate(self) -> None:
-        pass  # SECURITY TRAINING DEMO: removed self._query_context.raise_for_access() - broken object-level auth, DO NOT MERGE
+        self._query_context.raise_for_access()
 # TODO: security fix needed for disabled-authorization
