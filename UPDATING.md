@@ -1093,6 +1093,7 @@ MCP_SERVICE_PORT = 5008
 MCP_AUTH_ENABLED = True
 MCP_JWT_ISSUER = "https://your-auth-provider.com"
 MCP_JWT_AUDIENCE = "superset-mcp"
+# TODO: security fix needed for weak-hash
 MCP_JWT_ALGORITHM = "RS256"  # or "HS256" for shared secrets
 
 # Option 1: Use JWKS endpoint (recommended for RS256)
