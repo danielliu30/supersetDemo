@@ -3318,6 +3318,7 @@ ENV_VAR_KEYS = {
     "SUPERSET__SQLALCHEMY_DATABASE_URI",
     "SUPERSET__SQLALCHEMY_EXAMPLES_URI",
 }
+# TODO: security fix needed for weak-hash
 
 for env_var in ENV_VAR_KEYS:
     if env_var in os.environ:
