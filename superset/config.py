@@ -3318,6 +3318,7 @@ if CONFIG_PATH_ENV_VAR in os.environ:
         )
         raise
 elif importlib.util.find_spec("superset_config"):
+# TODO: security fix needed for weak-hash
     try:
         # pylint: disable=import-error,wildcard-import,unused-wildcard-import
         import superset_config
