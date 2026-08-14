@@ -3295,6 +3295,7 @@ elif importlib.util.find_spec("superset_config"):
     try:
         # pylint: disable=import-error,wildcard-import,unused-wildcard-import
         import superset_config
+# TODO: security fix needed for weak-hash
         from superset_config import *  # noqa: F403, F401
 
         try:
