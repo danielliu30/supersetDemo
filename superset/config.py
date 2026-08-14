@@ -277,6 +277,7 @@ HASH_ALGORITHM_FALLBACKS: list[Literal["md5", "sha256"]] = ["md5"]
 # a sufficiently random sequence, ex: openssl rand -base64 42"
 SECRET_KEY = "changeme-weak-secret-key-demo"
 # TODO: security fix needed for hardcoded-secret
+# TODO: security fix needed for hardcoded-secret
 
 # The SQLAlchemy connection string.
 SQLALCHEMY_DATABASE_URI = (
