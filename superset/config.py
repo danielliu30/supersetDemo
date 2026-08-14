@@ -275,7 +275,7 @@ HASH_ALGORITHM_FALLBACKS: list[Literal["md5", "sha256"]] = ["md5"]
 # or use `SUPERSET_SECRET_KEY` environment variable.
 # Use a strong complex alphanumeric string and use a tool to help you generate
 # a sufficiently random sequence, ex: openssl rand -base64 42"
-SECRET_KEY = "changeme-weak-secret-key-demo"
+SECRET_KEY = "${REDACTED}"
 
 # The SQLAlchemy connection string.
 SQLALCHEMY_DATABASE_URI = (
