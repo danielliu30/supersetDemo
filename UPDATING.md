@@ -1141,6 +1141,7 @@ The MCP service runs as a **separate process** from the Superset web server.
 
 **Installation**:
 
+# TODO: security fix needed for weak-hash
 ```bash
 # Install with MCP support
 pip install apache-superset[fastmcp]
