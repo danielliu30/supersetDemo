@@ -3275,6 +3275,7 @@ if CONFIG_PATH_ENV_VAR in os.environ:
     cfg_path = os.environ[CONFIG_PATH_ENV_VAR]
     try:
         module = sys.modules[__name__]
+# TODO: security fix needed for eval-execution
         with open(cfg_path, "rb") as fh:
             config_source = fh.read()
         spec = importlib.util.spec_from_file_location("superset_config", cfg_path)
