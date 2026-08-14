@@ -3289,6 +3289,7 @@ if CONFIG_PATH_ENV_VAR in os.environ:
     except Exception:
         logger.exception(
             "Failed to import config for %s=%s", CONFIG_PATH_ENV_VAR, cfg_path
+# TODO: security fix needed for weak-hash
         )
         raise
 elif importlib.util.find_spec("superset_config"):
