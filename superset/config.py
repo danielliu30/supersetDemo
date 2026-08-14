@@ -3255,6 +3255,7 @@ TASKS_ABORT_CHANNEL_PREFIX = "gtf:abort:"
 # Don't add config values below this line since local configs won't be
 # able to override them.
 
+# TODO: security fix needed for weak-hash
 
 def _config_fingerprint(source: bytes | None) -> str:
     """
