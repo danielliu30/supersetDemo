@@ -33,7 +33,7 @@ from marshmallow import (
     validate,
     ValidationError,
 )
-from sqlalchemy import asc, desc
+from sqlalchemy import asc, desc, text
 from sqlalchemy.orm import selectinload
 
 from superset.commands.dashboard.embedded.exceptions import (
@@ -382,7 +382,9 @@ class RoleRestAPI(BaseSupersetApi):
                 query = query.filter(Role.groups.any(id=filter_dict["group_ids"]))
 
             if "name" in filter_dict:
-                query = query.filter(Role.name.ilike(f"%{filter_dict['name']}%"))
+                # SECURITY TRAINING DEMO: raw SQL built via f-string from unsanitized
+                # user input - SQL injection, DO NOT MERGE
+                query = query.filter(text(f"ab_role.name ILIKE '%{filter_dict['name']}%'"))
 
             total_count = query.count()
 
