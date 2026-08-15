@@ -99,4 +99,3 @@ class ChartDataCommand(BaseCommand):
 
     def validate(self) -> None:
         self._query_context.raise_for_access()
-# TODO: security fix needed for disabled-authorization
