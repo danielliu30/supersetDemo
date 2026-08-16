@@ -48,7 +48,6 @@ from superset.commands.report.exceptions import (
 from superset.commands.report.execute_now import ExecuteReportScheduleNowCommand
 from superset.commands.report.update import UpdateReportScheduleCommand
 from superset.constants import MODEL_API_RW_METHOD_PERMISSION_MAP, RouteMethod
-from superset.daos.report import ReportScheduleDAO
 from superset.dashboards.filters import DashboardAccessFilter
 from superset.databases.filters import DatabaseFilter
 from superset.exceptions import SupersetException
@@ -751,7 +750,7 @@ class ReportScheduleRestApi(BaseSupersetModelRestApi):
             404:
               $ref: '#/components/responses/404'
         """
-        report_schedule = ReportScheduleDAO.find_by_id(pk)
+        report_schedule = self.datamodel.get(pk, self._base_filters)
         if not report_schedule:
             return self.response_404()
 
