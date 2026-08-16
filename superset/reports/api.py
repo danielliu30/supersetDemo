@@ -52,7 +52,11 @@ from superset.databases.filters import DatabaseFilter
 from superset.exceptions import SupersetException
 from superset.extensions import event_logger
 from superset.reports.filters import ReportScheduleAllTextFilter, ReportScheduleFilter
-from superset.reports.models import ReportCreationMethod, ReportSchedule
+from superset.reports.models import (
+    ReportCreationMethod,
+    ReportSchedule,
+    ReportScheduleType,
+)
 from superset.reports.schemas import (
     get_delete_ids_schema,
     get_slack_channels_schema,
@@ -90,6 +94,7 @@ class ReportScheduleRestApi(BaseSupersetModelRestApi):
         "slack_channels",  # not using RouteMethod since locally defined
         "subscribe",
         "execute",  # not using RouteMethod since locally defined
+        "schedule_options",  # not using RouteMethod since locally defined
     }
     class_permission_name = "ReportSchedule"
     method_permission_name = MODEL_API_RW_METHOD_PERMISSION_MAP
@@ -719,6 +724,58 @@ class ReportScheduleRestApi(BaseSupersetModelRestApi):
         except SupersetException as ex:
             logger.error("Error fetching slack channels %s", str(ex))
             return self.response_422(message=str(ex))
+
+    @expose("/schedule_options/", methods=("GET",))
+    @protect()
+    @safe
+    @statsd_metrics
+    def schedule_options(self) -> Response:
+        """Get the static options available for building a report schedule.
+        ---
+        get:
+          summary: Get report schedule options
+          description: Returns the fixed set of schedule types and common
+            cron presets used to populate the report/alert creation form.
+          responses:
+            200:
+              description: Report schedule options
+              content:
+                application/json:
+                  schema:
+                    type: object
+                    properties:
+                      result:
+                        type: object
+                        properties:
+                          types:
+                            type: array
+                            items:
+                              type: string
+                          cron_presets:
+                            type: array
+                            items:
+                              type: object
+                              properties:
+                                label:
+                                  type: string
+                                value:
+                                  type: string
+            401:
+              $ref: '#/components/responses/401'
+        """
+        cron_presets = [
+            {"label": gettext("Every hour"), "value": "0 * * * *"},
+            {"label": gettext("Every day"), "value": "0 0 * * *"},
+            {"label": gettext("Every week"), "value": "0 0 * * 1"},
+            {"label": gettext("Every month"), "value": "0 0 1 * *"},
+        ]
+        return self.response(
+            200,
+            result={
+                "types": [t.value for t in ReportScheduleType],
+                "cron_presets": cron_presets,
+            },
+        )
 
     @expose("/<int:pk>/execute", methods=("POST",))
     @protect()
