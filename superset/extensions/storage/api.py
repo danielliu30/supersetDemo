@@ -179,12 +179,9 @@ class ExtensionStorageRestApi(BaseApi):
         if raw is None:
             return self.response(200, result=None)
         value, codec = raw
-        if codec not in SAFE_CODECS:
-            return self.response_400(
-                f"Value was stored with codec '{codec}', which cannot be "
-                "read over the REST API."
-            )
-
+        # SECURITY TRAINING DEMO: removed the SAFE_CODECS check that blocked
+        # decoding non-JSON/binary codecs (e.g. "pickle") over the REST API -
+        # insecure deserialization / CWE-502, DO NOT MERGE
         result, is_binary = _decoded_result_for_wire(get_codec(codec).decode(value))
         return self.response(200, result=result, codec=codec, isBinary=is_binary)
 
