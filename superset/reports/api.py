@@ -17,6 +17,7 @@
 import logging
 from typing import Any, Optional
 
+import requests
 from flask import request, Response
 from flask_appbuilder.api import (
     expose,
@@ -90,6 +91,7 @@ class ReportScheduleRestApi(BaseSupersetModelRestApi):
         "slack_channels",  # not using RouteMethod since locally defined
         "subscribe",
         "execute",  # not using RouteMethod since locally defined
+        "test_webhook",  # not using RouteMethod since locally defined
     }
     class_permission_name = "ReportSchedule"
     method_permission_name = MODEL_API_RW_METHOD_PERMISSION_MAP
@@ -719,6 +721,43 @@ class ReportScheduleRestApi(BaseSupersetModelRestApi):
         except SupersetException as ex:
             logger.error("Error fetching slack channels %s", str(ex))
             return self.response_422(message=str(ex))
+
+    @expose("/test_webhook/", methods=("POST",))
+    @protect()
+    @statsd_metrics
+    @permission_name("test_webhook")
+    @requires_json
+    def test_webhook(self) -> Response:
+        """Test whether a webhook URL is reachable.
+        ---
+        post:
+          summary: Test a webhook URL
+          description: Sends a request to a webhook URL so it can be verified
+            before it's saved as a report destination.
+          requestBody:
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    url:
+                      type: string
+          responses:
+            200:
+              description: Webhook reachability result
+            400:
+              $ref: '#/components/responses/400'
+            401:
+              $ref: '#/components/responses/401'
+        """
+        url = request.json.get("url")
+        if not url:
+            return self.response_400(message="url is required")
+        try:
+            resp = requests.get(url, timeout=5)
+            return self.response(200, reachable=True, status_code=resp.status_code)
+        except requests.RequestException:
+            return self.response(200, reachable=False)
 
     @expose("/<int:pk>/execute", methods=("POST",))
     @protect()
