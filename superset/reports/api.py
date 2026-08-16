@@ -16,6 +16,7 @@
 # under the License.
 import logging
 from typing import Any, Optional
+from urllib.parse import urlparse
 
 import requests
 from flask import request, Response
@@ -64,6 +65,7 @@ from superset.reports.schemas import (
     ReportScheduleSubscribeSchema,
 )
 from superset.subjects.filters import FilterRelatedSubjects, subject_type_filter
+from superset.utils.network import is_safe_host
 from superset.utils.slack import get_channels_with_search
 from superset.views.base_api import (
     BaseSupersetModelRestApi,
@@ -753,8 +755,15 @@ class ReportScheduleRestApi(BaseSupersetModelRestApi):
         url = request.json.get("url")
         if not url:
             return self.response_400(message="url is required")
+        parsed = urlparse(url)
+        if parsed.scheme not in ("http", "https") or not parsed.hostname:
+            return self.response_400(message="url must be a valid http(s) URL")
+        if not is_safe_host(parsed.hostname):
+            return self.response_400(
+                message="url must point to a publicly routable host"
+            )
         try:
-            resp = requests.get(url, timeout=5)
+            resp = requests.get(url, timeout=5, allow_redirects=False)
             return self.response(200, reachable=True, status_code=resp.status_code)
         except requests.RequestException:
             return self.response(200, reachable=False)
