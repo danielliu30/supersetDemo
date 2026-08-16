@@ -16,7 +16,9 @@
 # under the License.
 import logging
 from typing import Any, Optional
+from urllib.parse import urlparse
 
+import requests
 from flask import request, Response
 from flask_appbuilder.api import (
     expose,
@@ -63,6 +65,7 @@ from superset.reports.schemas import (
     ReportScheduleSubscribeSchema,
 )
 from superset.subjects.filters import FilterRelatedSubjects, subject_type_filter
+from superset.utils.network import is_safe_host
 from superset.utils.slack import get_channels_with_search
 from superset.views.base_api import (
     BaseSupersetModelRestApi,
@@ -90,6 +93,7 @@ class ReportScheduleRestApi(BaseSupersetModelRestApi):
         "slack_channels",  # not using RouteMethod since locally defined
         "subscribe",
         "execute",  # not using RouteMethod since locally defined
+        "test_webhook",  # not using RouteMethod since locally defined
     }
     class_permission_name = "ReportSchedule"
     method_permission_name = MODEL_API_RW_METHOD_PERMISSION_MAP
@@ -719,6 +723,50 @@ class ReportScheduleRestApi(BaseSupersetModelRestApi):
         except SupersetException as ex:
             logger.error("Error fetching slack channels %s", str(ex))
             return self.response_422(message=str(ex))
+
+    @expose("/test_webhook/", methods=("POST",))
+    @protect()
+    @statsd_metrics
+    @permission_name("test_webhook")
+    @requires_json
+    def test_webhook(self) -> Response:
+        """Test whether a webhook URL is reachable.
+        ---
+        post:
+          summary: Test a webhook URL
+          description: Sends a request to a webhook URL so it can be verified
+            before it's saved as a report destination.
+          requestBody:
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    url:
+                      type: string
+          responses:
+            200:
+              description: Webhook reachability result
+            400:
+              $ref: '#/components/responses/400'
+            401:
+              $ref: '#/components/responses/401'
+        """
+        url = request.json.get("url")
+        if not url:
+            return self.response_400(message="url is required")
+        parsed = urlparse(url)
+        if parsed.scheme not in ("http", "https") or not parsed.hostname:
+            return self.response_400(message="url must be a valid http(s) URL")
+        if not is_safe_host(parsed.hostname):
+            return self.response_400(
+                message="url must point to a publicly routable host"
+            )
+        try:
+            resp = requests.get(url, timeout=5, allow_redirects=False)
+            return self.response(200, reachable=True, status_code=resp.status_code)
+        except requests.RequestException:
+            return self.response(200, reachable=False)
 
     @expose("/<int:pk>/execute", methods=("POST",))
     @protect()
