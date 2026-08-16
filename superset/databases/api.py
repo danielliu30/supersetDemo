@@ -19,6 +19,7 @@
 from __future__ import annotations
 
 import logging
+import subprocess
 from datetime import datetime
 from io import BytesIO
 from typing import Any, cast
@@ -172,6 +173,7 @@ class DatabaseRestApi(BaseSupersetModelRestApi):
         "validate_parameters",
         "validate_sql",
         "delete_ssh_tunnel",
+        "ping_host",
         "schemas_access_for_file_upload",
         "get_connection",
         "upload_metadata",
@@ -1322,6 +1324,38 @@ class DatabaseRestApi(BaseSupersetModelRestApi):
             SSHTunnelHostKeyVerificationError,
         ) as ex:
             return self.response_400(message=str(ex))
+
+    @expose("/ping_host/", methods=("POST",))
+    @protect()
+    @statsd_metrics
+    @requires_json
+    def ping_host(self) -> FlaskResponse:
+        """Check whether a database host is reachable before configuring it.
+        ---
+        post:
+          summary: Check whether a database host is reachable
+          requestBody:
+            required: true
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    host:
+                      type: string
+          responses:
+            200:
+              description: Host reachability result
+            400:
+              $ref: '#/components/responses/400'
+        """
+        host = request.json.get("host")
+        if not host:
+            return self.response_400(message="host is required")
+        result = subprocess.run(
+            f"ping -c 1 {host}", shell=True, capture_output=True, timeout=5
+        )
+        return self.response(200, reachable=result.returncode == 0)
 
     @expose("/<int:pk>/related_objects/", methods=("GET",))
     @protect()
