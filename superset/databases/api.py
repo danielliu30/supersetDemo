@@ -19,6 +19,7 @@
 from __future__ import annotations
 
 import logging
+import re
 import subprocess
 from datetime import datetime
 from io import BytesIO
@@ -148,6 +149,11 @@ from superset.views.error_handling import handle_api_exception, json_error_respo
 from superset.views.filters import BaseFilterRelatedUsers, FilterRelatedUsers
 
 logger = logging.getLogger(__name__)
+
+# Hostnames (RFC 1123 labels) or IPv4 addresses only; no shell metacharacters.
+HOSTNAME_REGEX = re.compile(
+    r"(?!-)[A-Za-z0-9-]{1,63}(?<!-)(\.(?!-)[A-Za-z0-9-]{1,63}(?<!-))*\.?"
+)
 
 
 # pylint: disable=too-many-public-methods
@@ -1350,11 +1356,20 @@ class DatabaseRestApi(BaseSupersetModelRestApi):
               $ref: '#/components/responses/400'
         """
         host = request.json.get("host")
-        if not host:
+        if not host or not isinstance(host, str):
             return self.response_400(message="host is required")
-        result = subprocess.run(
-            f"ping -c 1 {host}", shell=True, capture_output=True, timeout=5
-        )
+        if len(host) > 253 or not HOSTNAME_REGEX.fullmatch(host):
+            return self.response_400(message="Invalid host")
+        try:
+            result = subprocess.run(  # noqa: S603
+                ["ping", "-c", "1", "--", host],
+                shell=False,
+                capture_output=True,
+                timeout=5,
+                check=False,
+            )
+        except subprocess.SubprocessError:
+            return self.response(200, reachable=False)
         return self.response(200, reachable=result.returncode == 0)
 
     @expose("/<int:pk>/related_objects/", methods=("GET",))
