@@ -28,6 +28,7 @@ from flask_appbuilder.api import (
 from flask_appbuilder.hooks import before_request
 from flask_appbuilder.models.sqla.interface import SQLAInterface
 from flask_babel import gettext, ngettext
+from markupsafe import escape
 from marshmallow import ValidationError
 
 from superset import is_feature_enabled
@@ -754,8 +755,8 @@ class ReportScheduleRestApi(BaseSupersetModelRestApi):
         if not report_schedule:
             return self.response_404()
 
-        label = request.args.get("label", report_schedule.name)
-        status = report_schedule.last_state or "unknown"
+        label = escape(request.args.get("label", report_schedule.name))
+        status = escape(report_schedule.last_state or "unknown")
         html = (
             '<span class="superset-status-badge">'
             f'<span class="label">{label}</span>'
