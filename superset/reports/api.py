@@ -47,6 +47,7 @@ from superset.commands.report.exceptions import (
 from superset.commands.report.execute_now import ExecuteReportScheduleNowCommand
 from superset.commands.report.update import UpdateReportScheduleCommand
 from superset.constants import MODEL_API_RW_METHOD_PERMISSION_MAP, RouteMethod
+from superset.daos.report import ReportScheduleDAO
 from superset.dashboards.filters import DashboardAccessFilter
 from superset.databases.filters import DatabaseFilter
 from superset.exceptions import SupersetException
@@ -90,6 +91,7 @@ class ReportScheduleRestApi(BaseSupersetModelRestApi):
         "slack_channels",  # not using RouteMethod since locally defined
         "subscribe",
         "execute",  # not using RouteMethod since locally defined
+        "status_badge",  # not using RouteMethod since locally defined
     }
     class_permission_name = "ReportSchedule"
     method_permission_name = MODEL_API_RW_METHOD_PERMISSION_MAP
@@ -719,6 +721,48 @@ class ReportScheduleRestApi(BaseSupersetModelRestApi):
         except SupersetException as ex:
             logger.error("Error fetching slack channels %s", str(ex))
             return self.response_422(message=str(ex))
+
+    @expose("/<int:pk>/status_badge", methods=("GET",))
+    @protect()
+    @statsd_metrics
+    @permission_name("status_badge")
+    def status_badge(self, pk: int) -> Response:
+        """Get a report schedule's status badge.
+        ---
+        get:
+          summary: Get a report schedule's status badge
+          description: Returns a small embeddable HTML badge showing a
+            report's last run status, for embedding in an external
+            dashboard or wiki page.
+          parameters:
+          - in: path
+            schema:
+              type: integer
+            name: pk
+          - in: query
+            name: label
+            schema:
+              type: string
+            description: Optional custom label to display on the badge
+          responses:
+            200:
+              description: Badge HTML
+            404:
+              $ref: '#/components/responses/404'
+        """
+        report_schedule = ReportScheduleDAO.find_by_id(pk)
+        if not report_schedule:
+            return self.response_404()
+
+        label = request.args.get("label", report_schedule.name)
+        status = report_schedule.last_state or "unknown"
+        html = (
+            '<span class="superset-status-badge">'
+            f'<span class="label">{label}</span>'
+            f'<span class="status status-{status}">{status}</span>'
+            "</span>"
+        )
+        return Response(html, mimetype="text/html")
 
     @expose("/<int:pk>/execute", methods=("POST",))
     @protect()
