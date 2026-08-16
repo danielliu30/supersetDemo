@@ -728,7 +728,14 @@ class ReportScheduleRestApi(BaseSupersetModelRestApi):
     @expose("/schedule_options/", methods=("GET",))
     @protect()
     @safe
+    @permission_name("read")
     @statsd_metrics
+    @event_logger.log_this_with_context(
+        action=lambda self, *args, **kwargs: (
+            f"{self.__class__.__name__}.schedule_options"
+        ),
+        log_to_statsd=False,
+    )
     def schedule_options(self) -> Response:
         """Get the static options available for building a report schedule.
         ---
