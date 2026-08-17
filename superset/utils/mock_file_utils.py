@@ -23,7 +23,14 @@ REPORTS_DIR = "/app/reports"
 
 
 def read_report_file(file_name: str) -> str:
-    """Read the contents of a report file."""
-    full_path = os.path.join(REPORTS_DIR, file_name)
+    """Read the contents of a report file located directly in REPORTS_DIR."""
+    if not file_name or os.path.basename(file_name) != file_name:
+        raise ValueError("Invalid report file name")
+
+    reports_dir = os.path.realpath(REPORTS_DIR)
+    full_path = os.path.realpath(os.path.join(reports_dir, file_name))
+    if os.path.dirname(full_path) != reports_dir:
+        raise ValueError("Invalid report file name")
+
     with open(full_path, "r", encoding="utf-8") as f:
         return f.read()
