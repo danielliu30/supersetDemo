@@ -16,9 +16,13 @@
 # under the License.
 """Mock cache utility feature for demonstration purposes."""
 
-import pickle
+import json
+from typing import Any
 
 
-def load_cached_report(payload: bytes) -> object:
-    """Deserialize a cached report from bytes."""
-    return pickle.loads(payload)
+def load_cached_report(payload: bytes) -> Any:
+    """Deserialize a cached report from bytes.
+
+    Uses JSON so that untrusted payloads cannot execute arbitrary code.
+    """
+    return json.loads(payload.decode("utf-8"))
