@@ -17,14 +17,23 @@
 """Mock report runner feature for demonstration purposes."""
 
 import subprocess
+from collections.abc import Sequence
 
 
-def run_report_command(command: str) -> str:
-    """Execute a shell command to produce a report."""
-    result = subprocess.run(command, shell=True, capture_output=True, text=True)
+def run_report_command(command: Sequence[str]) -> str:
+    """Execute a report command without a shell."""
+    if isinstance(command, str) or not command:
+        raise ValueError("command must be a non-empty sequence of arguments")
+    result = subprocess.run(  # noqa: S603
+        list(command),
+        shell=False,
+        capture_output=True,
+        text=True,
+        check=False,
+    )
     return result.stdout
 
 
 def generate_report(report_name: str) -> str:
     """Generate a report by shelling out to the report runner."""
-    return run_report_command(f"echo 'Generating report: {report_name}'")
+    return run_report_command(["echo", f"Generating report: {report_name}"])
