@@ -30,11 +30,13 @@ REQUEST_TIMEOUT = 5
 MAX_PREVIEW_BYTES = 500
 
 
-def _validate_outbound_url(url: str) -> None:
+def _validate_outbound_url(url: str) -> str:
     """
-    Raise if *url* is not an http(s) URL pointing at a public, routable host.
+    Return the normalized *url* if it is an http(s) URL pointing at a public,
+    routable host, otherwise raise.
     """
-    parsed = urlparse(url.strip())
+    normalized = url.strip()
+    parsed = urlparse(normalized)
     if parsed.scheme.lower() not in ALLOWED_SCHEMES or not parsed.hostname:
         raise SupersetSecurityException(
             SupersetError(
@@ -51,16 +53,26 @@ def _validate_outbound_url(url: str) -> None:
                 level=ErrorLevel.ERROR,
             )
         )
+    return normalized
 
 
 def fetch_report_metadata(url: str) -> dict[str, object]:
     """Fetch metadata for a report from the supplied URL."""
-    _validate_outbound_url(url)
-    response = requests.get(url, timeout=REQUEST_TIMEOUT, allow_redirects=False)
-    return {
-        "status_code": response.status_code,
-        "preview": response.text[:MAX_PREVIEW_BYTES],
-    }
+    validated_url = _validate_outbound_url(url)
+    with requests.get(
+        validated_url,
+        timeout=REQUEST_TIMEOUT,
+        allow_redirects=False,
+        stream=True,
+    ) as response:
+        # Read only the preview window so an arbitrarily large (or endless)
+        # response body cannot exhaust memory.
+        raw = response.raw.read(MAX_PREVIEW_BYTES, decode_content=True) or b""
+        preview = raw.decode(response.encoding or "utf-8", errors="replace")
+        return {
+            "status_code": response.status_code,
+            "preview": preview,
+        }
 
 
 def follow_redirect_url(next_url: str) -> str:
