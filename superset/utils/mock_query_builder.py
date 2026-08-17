@@ -19,13 +19,13 @@
 import re
 from typing import Any
 
-IDENTIFIER_RE = re.compile(r"^[A-Za-z_][A-Za-z0-9_]*$")
+IDENTIFIER_RE = re.compile(r"[A-Za-z_][A-Za-z0-9_]*")
 
 
 def _quote_identifier(identifier: str) -> str:
     """Validate an SQL identifier and return it double-quoted."""
-    if not IDENTIFIER_RE.match(identifier):
-        raise ValueError(f"Invalid SQL identifier: {identifier}")
+    if not IDENTIFIER_RE.fullmatch(identifier):
+        raise ValueError("Invalid SQL identifier")
     return f'"{identifier}"'
 
 
