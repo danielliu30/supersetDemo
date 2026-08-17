@@ -16,10 +16,23 @@
 # under the License.
 """Mock query builder feature for demonstration purposes."""
 
+import re
 from typing import Any
+
+IDENTIFIER_RE = re.compile(r"^[A-Za-z_][A-Za-z0-9_]*$")
+
+
+def _quote_identifier(identifier: str) -> str:
+    """Validate an SQL identifier and return it double-quoted."""
+    if not IDENTIFIER_RE.match(identifier):
+        raise ValueError(f"Invalid SQL identifier: {identifier}")
+    return f'"{identifier}"'
 
 
 def list_sorted_records(cursor: Any, table_name: str, sort_column: str) -> Any:
     """List records from a table sorted by the given column."""
-    query = "SELECT * FROM %s ORDER BY %s" % (table_name, sort_column)
+    query = (
+        f"SELECT * FROM {_quote_identifier(table_name)} "
+        f"ORDER BY {_quote_identifier(sort_column)}"
+    )
     return cursor.execute(query)
