@@ -18,8 +18,10 @@
 
 from typing import Any
 
+from sqlalchemy import text
+
 
 def execute_report_query(query_filter: str, connection: Any) -> Any:
     """Run a report query filtered by name."""
-    query = f"SELECT * FROM reports WHERE name = '{query_filter}'"
-    return connection.execute(query)
+    query = text("SELECT * FROM reports WHERE name = :query_filter")
+    return connection.execute(query, {"query_filter": query_filter})
